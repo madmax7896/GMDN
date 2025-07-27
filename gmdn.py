@@ -27,6 +27,7 @@ class SemGCNLayer(nn.Module):
         self.gcn = GCNConv(in_channels, out_channels)
         self.norm = nn.LayerNorm(out_channels)
         self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.4)
         self.res_proj = nn.Linear(in_channels, out_channels) if in_channels != out_channels else nn.Identity()
 
     def forward(self, x, edge_index):
@@ -34,6 +35,7 @@ class SemGCNLayer(nn.Module):
         x = self.gcn(x, edge_index)
         x = self.norm(x)
         x = self.relu(x)
+        x = self.dropout(x)
         return x + res
 
 # Full Model
